@@ -178,7 +178,9 @@ namespace LojaDeProdutos.Services.ProductService
 
             try
             {
-                var products = await _context.Products.ToListAsync();
+                var products = await _context.Products
+                            .Include(p => p.Category)
+                            .ToListAsync();
 
                 responseModel.Data = products;
                 responseModel.Message = "Products available";

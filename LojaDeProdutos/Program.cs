@@ -1,4 +1,6 @@
 using LojaDeProdutos.Context;
+using LojaDeProdutos.Services.CategoryService;
+using LojaDeProdutos.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,16 @@ options.UseMySql(
     builder.Configuration.GetConnectionString("DefaultConnection"),
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
 ));
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+
+builder.Services.AddScoped<IProductInterface, ProductService>();
+builder.Services.AddScoped<ICategoryInterface, CategoryService>();
 
 var app = builder.Build();
 
